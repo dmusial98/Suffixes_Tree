@@ -16,9 +16,11 @@ public:
 
 	bool does_exist_child_with_that_letter(char letter);
 	bool does_tree_contain_sufix(string sufix);
+	bool does_tree_contain_string(string suffix);
 	void append_letter_at_the_end(char letter);
 	void create_suffix(string suffix);
 	tree_node** create_two_branches(string suffix1, string suffix2);
+	string* get_all_suffixes_from_node(int* size, tree_node* node);
 };
 
 tree_node* create_suffix_tree_ukkonen(string input_text)
@@ -56,6 +58,32 @@ bool tree_node::does_exist_child_with_that_letter(char letter)
 	return false;
 }
 
+string* tree_node::get_all_suffixes_from_node(int* size, tree_node* node)
+{
+
+	return nullptr;
+}
+
+
+bool tree_node::does_tree_contain_string(string suffix)
+{
+	if (this->is_root)
+	{
+		tree_node* ptr = this->left_child;
+
+		while (ptr)
+		{
+			if (ptr->does_tree_contain_string(suffix))
+				return true;
+
+			ptr = ptr->right_brother;
+		}
+	}
+	else
+	{
+		
+	}
+}
 
 /*
 * when root check if child contains suffix
@@ -75,30 +103,42 @@ bool tree_node::does_tree_contain_sufix(string suffix)
 			ptr = ptr->right_brother;
 		}
 	}
-	else
+	else //!is_root
 	{
-		if (this->text.length() >= suffix.length())
-		{
-			size_t found = this->text.find(suffix);
-			if (!found) //found == 0
-				return true;
 
-		}
-		else
-		{
-			size_t found = this->text.find(suffix.substr(0, this->text.length()));
-			if (!found) //found at 0 index -> we will check the rest of suffix
-			{
-				tree_node* ptr = this->left_child;
-				while (ptr)
-				{
-					if (ptr->does_tree_contain_sufix(suffix.substr(this->text.length())))
-						return true;
 
-					ptr = ptr->right_brother;
-				}
-			}
-		}
+
+		//if (this->text.length() >= suffix.length())
+		//{
+		//	//at 0 index we have suffix
+		//	size_t found = this->text.find(suffix);
+		//	if (!found) //found == 0
+		//		return true;
+
+		//}
+		//else //PO CO TO?
+		//{
+
+		//	//TODO: Potrzebna metoda zwracajaca wszystkie suffiksy z danego wezla wglab 
+		//	//TODO: Potrzebna metoda sprawdzajaca czy w tych suffiksach znajduje sie okreslony string 
+		//	if ()
+		//	{
+
+		//	}
+
+		//	size_t found = this->text.find(suffix.substr(0, this->text.length()));
+		//	if (!found) //found at 0 index -> we will check the rest of suffix
+		//	{
+		//		tree_node* ptr = this->left_child;
+		//		while (ptr)
+		//		{
+		//			if (ptr->does_tree_contain_sufix(suffix.substr(this->text.length())))
+		//				return true;
+
+		//			ptr = ptr->right_brother;
+		//		}
+		//	}
+		//}
 	}
 
 	return false;
@@ -203,17 +243,22 @@ void tree_node::append_letter_at_the_end(char letter)
 int main()
 {
 	tree_node* ptr = new tree_node("", true);
+	// M
 	ptr->create_suffix("M");
+	// I
 	ptr->append_letter_at_the_end('I');
 	ptr->create_suffix("I");
+	// S
 	ptr->append_letter_at_the_end('S');
 	ptr->create_suffix("S");
+	// S
 	ptr->append_letter_at_the_end('S');
-	ptr->append_letter_at_the_end('I');
-	bool first = ptr->does_tree_contain_sufix("MISSI");
-	bool second = ptr->does_tree_contain_sufix("ISSI");
-	bool third = ptr->does_tree_contain_sufix("SSI");
-	bool forth = ptr->does_tree_contain_sufix("SI");
-	bool fifth = ptr->does_tree_contain_sufix("I");
+	// I
+	//ptr->append_letter_at_the_end('I');
+	bool first = ptr->does_tree_contain_sufix("MISS");
+	bool second = ptr->does_tree_contain_sufix("ISS");
+	bool third = ptr->does_tree_contain_sufix("SS");
+	bool forth = ptr->does_tree_contain_sufix("S");
+	//bool fifth = ptr->does_tree_contain_sufix("I");
 	return 0;
 }
