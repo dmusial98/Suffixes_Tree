@@ -169,6 +169,8 @@ void tree_node::create_suffix(string suffix)
 
 		while (ptr && ptr->text[0] != suffix[0])
 			ptr = ptr->right_brother;
+		//////////////////////////////////////////
+		
 
 		if (!ptr) //we don't have node with correct first letter
 		{
