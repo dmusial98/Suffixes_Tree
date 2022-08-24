@@ -81,7 +81,7 @@ bool tree_node::does_tree_contain_string(string suffix)
 	}
 	else
 	{
-		
+
 	}
 }
 
@@ -144,9 +144,10 @@ bool tree_node::does_tree_contain_sufix(string suffix)
 	return false;
 }
 
+//return two tree_nodes with specified suffixes
 tree_node** tree_node::create_two_branches(string suffix1, string suffix2)
 {
-	tree_node** nodes = new tree_node*[2];
+	tree_node** nodes = new tree_node * [2];
 
 	nodes[0] = new tree_node(suffix1);
 	nodes[1] = new tree_node(suffix2);
@@ -156,19 +157,23 @@ tree_node** tree_node::create_two_branches(string suffix1, string suffix2)
 
 void tree_node::create_suffix(string suffix)
 {
+
 	if (this->is_root)
 	{
+		//create suffix under root node
 		if (!this->left_child)
 		{
 			this->left_child = new tree_node(suffix);
 			return;
 		}
+		////////////////////////////////
 
 		//find node with correct first letter
 		tree_node* ptr = this->left_child;
 
 		while (ptr && ptr->text[0] != suffix[0])
 			ptr = ptr->right_brother;
+		//////////////////////////////////////
 
 		if (!ptr) //we don't have node with correct first letter
 		{
@@ -191,10 +196,14 @@ void tree_node::create_suffix(string suffix)
 					{
 						if (i == 0) //node contains specified suffix 
 							return;
-						else
+						else //node contains only part of new suffix
 						{
-							tree_node** nodes = create_two_branches(suffix.substr(suffix.length() - i + 1), this->text.substr(this->text.length() - i + 1));
-							
+							//TODO: Potrzebna metoda zwracajaca wszystkie suffiksy z danego wezla wglab 
+							//TODO: Potrzebna metoda sprawdzajaca czy w tych suffiksach znajduje sie okreslony string 
+
+
+							tree_node** nodes = create_two_branches(suffix.substr(suffix.length() - i - 1), this->text.substr(this->text.length() - i - 1));
+
 
 							return;
 						}
