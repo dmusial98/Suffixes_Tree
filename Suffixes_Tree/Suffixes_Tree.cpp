@@ -152,6 +152,8 @@ tree_node** tree_node::create_two_branches(string suffix1, string suffix2)
 	nodes[0] = new tree_node(suffix1);
 	nodes[1] = new tree_node(suffix2);
 
+	nodes[0]->right_brother = nodes[1];
+
 	return nodes;
 }
 
@@ -188,10 +190,16 @@ void tree_node::create_suffix(string suffix)
 		{
 			if (ptr->text[0] == suffix[0])
 			{
+				string var_to_iterate = ptr->text.length() > suffix.length() ? ptr->text : suffix;
+				
 				//find the longest string which match with node
-				for (int i = 0; i < suffix.length(); i++)
+				for (int i = 0; i < var_to_iterate.length(); i++)
 				{
-					size_t found = this->text.find(suffix.substr(0, this->text.length() - i));
+
+					if (suffix.substr(0, suffix.length() - i) == "")
+						continue; //TODO: zastanowic sie czy break nie bylby lepszy
+
+					size_t found = ptr->text.find(suffix.substr(0, suffix.length() - i));
 					if (!found) //found == 0 -> suffix.length() - i is the longest matching suffix
 					{
 						if (i == 0) //node contains specified suffix 
@@ -202,8 +210,25 @@ void tree_node::create_suffix(string suffix)
 							//TODO: Potrzebna metoda sprawdzajaca czy w tych suffiksach znajduje sie okreslony string 
 
 
-							tree_node** nodes = create_two_branches(suffix.substr(suffix.length() - i - 1), this->text.substr(this->text.length() - i - 1));
+							ptr->text = ptr->text.substr(0, suffix.length() - i); //cut main node's text before adding two new nodes below
+							tree_node** nodes = create_two_branches(suffix.substr(suffix.length() - i), ptr->text.substr(suffix.length() - i));
+							tree_node* old_node = ptr->left_child;
 
+							if (!ptr->left_child)
+							{
+								ptr->left_child = nodes[0];
+							}
+							else
+							{
+								//TODO: chyba bedzie potrzebne przepisanie starych nodow ponizej
+								nodes[1]->left_child = old_node->left_child;
+								//delete old_node;
+							}
+
+							if (ptr->right_brother)
+							{
+								//TODO: zastanowic sie nad przpeisywaniem braci
+							}
 
 							return;
 						}
@@ -263,7 +288,9 @@ int main()
 	// S
 	ptr->append_letter_at_the_end('S');
 	// I
-	//ptr->append_letter_at_the_end('I');
+	ptr->append_letter_at_the_end('I');
+	ptr->create_suffix("SSI");
+	ptr->create_suffix("SI");
 	bool first = ptr->does_tree_contain_sufix("MISS");
 	bool second = ptr->does_tree_contain_sufix("ISS");
 	bool third = ptr->does_tree_contain_sufix("SS");
